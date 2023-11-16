@@ -1,6 +1,6 @@
 import './App.css'
 import {useRef} from "react";
-
+// import axios from 'axios'
 function App() {
 
   const form = useRef(null)
@@ -14,33 +14,20 @@ function App() {
   let pattern = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/g;
       async function Post() {
         if (eInput.current.value.match(pattern2) && pInput.current.value.match(pattern) && !eField.current.classList.contains("error") && !pField.current.classList.contains("error")) {
-          let formData = new FormData();
-          formData.append('login', eInput.current.value);
-          formData.append('password', pInput.current.value);
 
 
-          try {
-          let response = await fetch('http://localhost:3000/form', {
+          await fetch('http://localhost:3000/form', {
             method: 'POST',
             headers: {
-              'Access-Control-Allow-Origin': 'http://localhost:5173/',
+              // 'Access-Control-Allow-Origin': 'http://localhost:5173/',
+              'Content-Type': 'application/json',
             },
-            mode: "no-cors",
-            cache: "no-cache",
-            credentials: "same-origin",
-            body: formData
+            body: JSON.stringify({
+              'login': eInput.current.value,
+              'password': pInput.current.value,
+            })
           });
-            console.log(formData.get('login'))
-            console.log(formData.get('password'))
-            let result = await response.json();
-            console.log(result);
-          } catch (error) {
-            console.log(error)
-          }
-
-
-        }
-      }
+      }}
 
   window.onload = function() {
     form.current.onsubmit =  (e) => {
@@ -87,7 +74,6 @@ function App() {
         }
 
     }
-
 
   return (
     <>
